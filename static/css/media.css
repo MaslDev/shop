@@ -1,0 +1,11 @@
+@media (max-width: 767px) {
+    .header-topline-user {
+        margin-left: 20%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .header-topline-user {
+        margin-left: 20%;
+    }
+}

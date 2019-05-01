@@ -1,0 +1,83 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% block main %}
+    <form method="post" action="{% url 'create_product' %}" id="create-product-form"
+          class="text-center p-5 custom-form product-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <input type="text" id="product-name" placeholder="Enter a product name" name="product_name"
+               class="form-control" maxlength="70" required>
+        <textarea placeholder="Enter a product short description" id="product-short-description" class="form-control mb-3"
+                  required maxlength="180" name="product_short_description"></textarea>
+        <textarea placeholder="Enter a product description" id="product-description" class="form-control mb-3"
+                  required name="product_description"></textarea>
+        <input type="number" id="product-price" placeholder="Enter a product price" name="product_price"
+               class="form-control" step="any" min="0" required>
+        <input type="number" id="product-stock" placeholder="Enter a product stock" name="product_stock"
+               class="form-control" step="1 " min="0" required>
+
+        <label for="category" id="category-label" class="form-control">Choose category</label>
+
+        <p><select name="category" multiple="multiple" size="10" id="category" class="form-control" required>
+            {% for node,structure in categories|tree_info:"ancestors" %}
+                {% if node.is_child_node %}
+                    <option value="{{ node.name }}"
+                            style="margin-left: {% widthratio 20 1 node.mptt_level %}px">{{ node.name }}</option>
+                {% else %}
+                    <option value="{{ node.name }}">{{ node.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select></p>
+        <div class="add-title-image">
+            <label class="label">
+                <i class="material-icons">attach_file</i>
+                <span class="title">Add Title Image</span>
+                <input type="file" name="title_image" required id="title-image">
+            </label>
+        </div>
+        <div class="add-image">
+            <div class="row">
+                <div class="col">
+                    <label class="label">
+                        <i class="material-icons">attach_file</i>
+                        <span class="title">Add Image</span>
+                        <input type="file" name="detail_image_one" required>
+                    </label>
+                </div>
+                <div class="col">
+                    <label class="label">
+                        <i class="material-icons">attach_file</i>
+                        <span class="title">Add Image</span>
+                        <input type="file" name="detail_image_two" required>
+                    </label>
+                </div>
+                <div class="col">
+                    <label class="label">
+                        <i class="material-icons">attach_file</i>
+                        <span class="title">Add Image</span>
+                        <input type="file" name="detail_image_three">
+                    </label>
+                </div>
+                <div class="col">
+                    <label class="label">
+                        <i class="material-icons">attach_file</i>
+                        <span class="title">Add Image</span>
+                        <input type="file" name="detail_image_four">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" id="button-submit" class="btn btn-outline-success my-4 btn-block waves-effect">
+            Add
+        </button>
+    </form>
+{% endblock %}

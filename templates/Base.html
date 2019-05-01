@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Shop</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Custom styles (optional) -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Glyphicon-->
+    <link rel="stylesheet" href="{% static 'css/glyphicon.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- @Media -->
+    <link href="{% static 'css/media.css' %}" rel="stylesheet">
+    <!-- image slider-->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+
+<body>
+<header class="header">
+    <div class="layout">
+        <div class="header-topline">
+            {% if 'admin' in user_role %}
+                <div class="header-topline-item">
+                    <a href="{% url 'new_category' %}" id="track-order">New Category</a>
+                </div>
+                <div class="header-topline-item">
+                    <a href="{% url 'page_delete_category' %}" id="track-order">Delete Category</a>
+                </div>
+                <div class="header-topline-item">
+                    <a href="{% url 'new_product' %}" id="track-order">New Product</a>
+                </div>
+            {% else %}
+                <div class="header-topline-item">
+                    <a href="" id="contacts">Contacts</a>
+                </div>
+                <div class="header-topline-item">
+                    <a href="" id="track-order">Track order</a>
+                </div>
+            {% endif %}
+
+            <div class="header-topline-user">
+                <ul class="header-user-menu">
+                    {% if user.is_authenticated %}
+                        <li><a href="#"><span>Hi, </span><span
+                                class="glyphicon glyphicon-user"></span> {{ user.get_username }}</a>
+                            <ul class="header-user-submenu">
+                                <li><a href="{% url 'user_profile' %}">Profile</a></li>
+                                <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <button class="waves-effect" id="sign-in"><span class="glyphicon glyphicon-log-in"></span>
+                                Sing in
+                            </button>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="header-bottomline">
+            <div class="header-bottomline-item">
+                <a id="header__logo" href="/">Electronic</a>
+            </div>
+            <div class="header-bottomline-item">
+                <button class="waves-effect" id="products-catalog"><i
+                        class="fal fa-bars"></i> Products Catalog
+                </button>
+            </div>
+            <div class="header-bottomline-item">
+                <form class="form-inline product-search">
+                    <div class="col">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search"
+                               id="product-search-input">
+                    </div>
+                    <div class="col">
+                        <button class="form-control waves-effect" type="submit" id="product-search-submit">Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% if 'customer' in user_role %}
+                <div class="header-bottomline-cart">
+                    <a href="{% url 'user_cart' %}" id="user-cart"><i class="fal fa-shopping-cart"></i></a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<!-- Sing in modal -->
+<div class="modal fade" id="sign-in-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!--modal header-->
+            <div class="card">
+
+                <h5 class="card-header white-text text-center py-4"
+                    style="background-color: rgba(0, 53, 36, 0.6);">
+                    <strong>Sign in</strong>
+                </h5>
+
+                <!--Card content-->
+                <div class="card-body px-lg-5 pt-0">
+
+                    <!-- Form -->
+                    <form class="text-center" data-url="/accounts/user_login/" method="post" id="sign-in-form">
+                        {% csrf_token %}
+
+                        <!-- Email -->
+                        <div class="md-form">
+                            <input type="email" id="LoginFormEmail" class="form-control" name="email" required>
+                            <label for="LoginFormEmail" id="LoginFormEmailLabel">* E-mail</label>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="md-form">
+                            <input type="password" id="LoginFormPassword" class="form-control" name="password"
+                                   required>
+                            <label for="LoginFormPassword" id="LoginFormPasswordLabel">* Password</label>
+                        </div>
+
+                        <div class="d-flex justify-content-around">
+                            <div>
+                                <!-- Remember me -->
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="remember"
+                                           name="remember">
+                                    <label class="form-check-label" for="remember">Remember me</label>
+                                </div>
+                            </div>
+                            <div>
+                                <!-- Forgot password -->
+                                <a href="{% url 'forgot_password' %}">Forgot password?</a>
+                            </div>
+                        </div>
+
+                        <!-- Sign in button -->
+                        <button id="button-submit" class="btn btn-outline-success btn-block my-4 waves-effect"
+                                type="submit">Sign in
+                        </button>
+
+                        <!-- Register -->
+                        <p>
+                            <a style="color: rgba(0, 53, 36, 0.6);" href="{% url 'signup' %}">Register</a> or sign in
+                            with:
+                        </p>
+
+                        {#                        <a href="{% url 'social:begin' 'facebook' %}" class="btn-floating btn-fb btn-dribbble mx-1">#}
+                        {#                            <i class="fab fa-facebook"></i>#}
+                        {#                        </a>#}
+                        <a href="{% url 'social:begin' 'google-oauth2' %}"
+                           class="btn-floating btn-goo btn-dribbble mx-1">
+                            <i class="fab fa-google-plus"></i>
+                        </a>
+                        {#                        <a href="{% url 'social:begin' 'instagram' %}" class="btn-floating btn-in btn-dribbble mx-1">#}
+                        {#                            <i class="fab fa-instagram"></i>#}
+                        {#                        </a>#}
+                        <a href="{% url 'social:begin' 'github' %}"
+                           class="btn-floating btn-git btn-dribbble mx-1">
+                            <i class="fab fa-github"></i>
+                        </a>
+
+                    </form>
+                    <!-- Form -->
+
+                </div>
+
+            </div>
+            <!-- Material form login -->
+        </div>
+    </div>
+</div>
+<!-- Sing in modal -->
+
+{% block main %}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/jquery-3.4.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/registration/sign_in.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/mdb.js' %}"></script>
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
+    <script data-sil-id="5cc1a3ba53918a001063b6cb" src="{% static 'js/shop_app/customer_chat.js' %}"></script>
+{% endblock %}
+
+<!-- Start BawkBox Code-->
+<div class="sil-widget-customer-chat sil-widget" id="sil-widget-5cc1a3ba53918a001063b6cb"><a
+        href="//bawkbox.com/install/customer-chat">Customer Chat</a></div><!-- End BawkBox Code-->
+{% block extrajs %}
+{% endblock %}
+
+
+</body>
+</html>

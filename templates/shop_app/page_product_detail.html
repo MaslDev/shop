@@ -1,0 +1,98 @@
+{% extends 'shop_app/page_home.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% block product %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="title-image">
+                    <p><img src="{{ product.main_image.url }}" id="product-detail-title-image" alt=""></p>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <a class="other-image" href="#"><img src="{{ product.main_image.url }}" alt=""
+                                                                 width="60"
+                                                                 height="40"></a>
+                        </div>
+                        {% for product_image in product_images %}
+                            <div class="col-2">
+                                <a class="other-image" href="#"><img
+                                        src="{{ product_image.image.url }}" alt="" width="60" height="40"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+
+                <div id="product-detail-name">{{ product.name }}</div>
+                <hr>
+                {% if 'admin' in user_role %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col"><a href="{% url 'edit_product' product.id %}" id="button-submit"
+                                                class="btn btn-outline-success my-4 btn-block waves-effect">Edit
+                                product</a></div>
+                            <div class="col"><a href="{% url 'delete_product' product.id %}" id="button-submit"
+                                                class="btn btn-outline-success my-4 btn-block waves-effect">Delete
+                                product</a></div>
+                        </div>
+                    </div>
+                    <a href="{% url 'edit_product_images' product.id %}" id="button-submit"
+                       class="btn btn-outline-success my-4 btn-block waves-effect">Edit
+                        product images</a>
+                    <a href="{% url 'add_new_product_image' product.id %}" id="button-submit"
+                       class="btn btn-outline-success my-4 btn-block waves-effect">Add new image</a>
+                {% else %}
+                    <div id="product-detail-price">Price: {{ product.price }}</div>
+
+                    <hr>
+                    <form data-url="/add_product_to_cart/{{ product.id }}/" id="add-to-cart-form">
+                    {% csrf_token %}
+                    <div class="container1">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="quantity">Quantity:</label>
+                                <input type="number" id="quantity" name="quantity" class="form-control" min="1"
+                                       max="{{ product.stock }}" placeholder="Max: {{ product.stock }}">
+                            </div>
+                            <div class="col-6">
+                                <label for="phone">Phone:</label>
+                                <input type="text" id="phone" name="phone" class="form-control"
+                                       value="{{ user.phone }}">
+                                <small id="AddToCartFormPhoneHelpBlock" class="form-text text-muted mb-4">
+                                    Format: +380951234567
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="button-submit"
+                            class="btn btn-outline-success my-4 btn-block waves-effect">Add to cart
+                    </button>
+                {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="product-detail-description">{{ product.description }}</div>
+
+    <!-- Start BawkBox Code-->
+    <div class="sil-widget-star-rating sil-widget" id="sil-widget-5cc18e35becce4001be1ff04"><a
+            href="//bawkbox.com/install/star-rating">Customer Reviews</a></div>
+    <!-- End BawkBox Code-->
+
+
+
+
+{% endblock %}
+
+{% block extrajs %}
+    <script data-sil-id="5cc18e35becce4001be1ff04" src="{% static 'js/shop_app/product_review.js' %}"></script>
+    <script type="application/ld+json" src="/widget/star-rating/5cc18e35becce4001be1ff04/microdata"></script>
+    <script src="{% static 'js/shop_app/product_detail.js' %}"></script>
+    <script src="{% static 'js/shop_app/add_to_cart.js' %}"></script>
+    <script src="{% static 'js/shop_app/jquery.imageLens.js' %}"></script>
+{% endblock %}

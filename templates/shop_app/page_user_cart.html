@@ -1,0 +1,35 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <table id="cart">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cart_item in cart_items %}
+            <tr>
+                <td>{{ cart_item.product.name }}</td>
+                <td><img src="{{ cart_item.product.main_image.url }}" width="150"></td>
+                <td>{{ cart_item.product.price }}</td>
+                <td><a href="{% url 'delete_product_from_cart' cart_item.id  %}">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% for cart_item in cart_items %}
+
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+    <!-- form register -->
+    <form class="text-center p-5 custom-form" data-url="/accounts/user_create/" method="post" id="sign-up-form">
+        {% csrf_token %}
+
+        <p class="h4 mb-4">Sign up</p>
+
+
+        <div class="form-row mb-4">
+            <div class="col">
+                <!-- First name -->
+                <input type="text" id="RegisterFormFirstName" class="form-control" placeholder="* First name"
+                       name="first_name">
+            </div>
+            <div class="col">
+                <!-- Last name -->
+                <input type="text" id="RegisterFormLastName" class="form-control" placeholder="* Last name"
+                       name="last_name">
+            </div>
+        </div>
+
+        <!-- E-mail -->
+        <input type="email" id="RegisterFormEmail" class="form-control" placeholder="* E-mail" name="email">
+
+        <!-- Password -->
+
+        <div class="form-row mb-2 mt-4">
+            <div class="col">
+                <!-- Password-->
+                <input type="password" id="RegisterFormPassword" class="form-control" placeholder="* Password"
+                       name="password">
+            </div>
+            <div class="col">
+                <!-- Confirm password -->
+                <input type="password" id="RegisterFormConfirmPassword" class="form-control"
+                       placeholder="* Confirm Password" name="confirm_password">
+            </div>
+        </div>
+        <small id="RegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+            At least 8 characters and 1 digit
+        </small>
+
+        <!-- Phone number -->
+        <input type="tel" id="RegisterFormPhone" class="form-control" placeholder="* Phone number"
+               name="phone">
+        <small id="RegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
+            Format: +380951234567
+        </small>
+
+        <!-- Sign up submit -->
+        <button id="button-submit" class="btn btn-outline-success my-4 btn-block waves-effect" type="submit">Sign up</button>
+
+        <!-- Social register -->
+        <p>or sign up with:</p>
+
+{#        <a href="" class="btn-floating btn-fb btn-dribbble mx-1">#}
+{#            <i class="fab fa-facebook"></i>#}
+{#        </a>#}
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-floating btn-goo btn-dribbble mx-1">
+            <i class="fab fa-google-plus"></i>
+        </a>
+{#        <a href="" class="btn-floating btn-in btn-dribbble mx-1">#}
+{#            <i class="fab fa-instagram"></i>#}
+{#        </a>#}
+        <a href="{% url 'social:begin' 'github' %}" class="btn-floating btn-git btn-dribbble mx-1">
+            <i class="fab fa-github"></i>
+        </a>
+
+    </form>
+    <!-- form register -->
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/registration/sign_up.js' %}"></script>
+{% endblock %}

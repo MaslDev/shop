@@ -1,0 +1,38 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% block main %}
+    <form method="post" action="{% url 'create_category' %}" id="create-category-form"
+          class="text-center p-5 custom-form">
+        {% csrf_token %}
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <label for="parent-category" id="parent-category-label" class="form-control">Choose parent category</label>
+
+        <p><select name="parent_category" multiple="multiple" size="15" id="parent-category" class="form-control"
+                   required>
+            <option value="not_parent" selected>Not parent</option>
+            {% for node,structure in categories|tree_info:"ancestors" %}
+                {% if node.is_child_node %}
+                    <option value="{{ node.name }}"
+                            style="margin-left: {% widthratio 20 1 node.mptt_level %}px">{{ node.name }}</option>
+                {% else %}
+                    <option value="{{ node.name }}">{{ node.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select></p>
+
+        <input type="text" id="category" placeholder="Enter a category name" name="category" class="form-control"
+               maxlength="200" required>
+
+        <button type="submit" id="button-submit" class="btn btn-outline-success my-4 btn-block waves-effect">
+            Create
+        </button>
+    </form>
+{% endblock %}

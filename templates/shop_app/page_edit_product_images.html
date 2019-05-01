@@ -1,0 +1,45 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+    {% if messages %}
+        <div class="messages text-center">
+            {% for message in messages %}
+                <div{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="add-image">
+        <div class="row">
+            {% for product_image in product_images %}
+                <div class="col-4">
+                    <form action="{% url 'update_product_images' product_image.id %}" method="post" enctype="multipart/form-data" class="">
+                        {% csrf_token %}
+                        <div class="product-image-form">
+                            <ul class="product-image">
+                                <li><img src="{{ product_image.image.url }}" width="250"></li>
+                                <li><label class="label">
+                                    <i class="material-icons">attach_file</i>
+                                    <span class="title">Edit Image</span>
+                                    <input type="file" name="image">
+                                </label></li>
+                                <li>
+                                    <button type="submit" id="button-submit"
+                                            class="btn btn-outline-success my-4 btn-block waves-effect">Edit
+                                    </button>
+                                </li>
+                                <li>
+                                    <a href="{% url 'delete_product_images' product_image.id %}" id="button-submit"
+                                            class="btn btn-outline-success my-4 btn-block waves-effect">Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}

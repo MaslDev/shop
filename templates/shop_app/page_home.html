@@ -1,0 +1,74 @@
+{% extends 'Base.html' %}
+{% load mptt_tags %}
+{% load static %}
+{% block main %}
+
+    <div class="main-content">
+        <div class="row">
+            <div class="col-2">
+                <div class="left-content">
+                    <ul class="left-menu" style="font-family: 'Times New Roman'">
+                        {% for node,structure in categories|tree_info:"ancestors" %}
+                            <li><a href=""
+                                   style="margin-left: {% widthratio 20 1 node.mptt_level %}px">{{ node.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- end of left content -->
+            <div class="col-10">
+                <span id="delimiter"></span>
+                <div class="center-content">
+                    {% block product %}
+                        <div class="w3-content w3-display-container" style="margin-bottom: 2%; height: 50%">
+                            <a href="#"><img class="mySlides" src="{% static 'image/img_mountains_wide.jpg' %}"
+                                             style="width:100%; height: 280px"></a>
+                            <a href="#"><img class="mySlides" src="{% static 'image/img_nature_wide.jpg' %}"
+                                             style="width:100%;height: 280px"></a>
+                            <a href="#"><img class="mySlides" src="{% static 'image/img_snow_wide.jpg' %}"
+                                             style="width:100%;height: 280px"></a>
+                            <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
+                                 style="width:100%">
+                                <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+                                <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+                                <span class="w3-badge demo w3-border w3-transparent w3-hover-white"
+                                      onclick="currentDiv(1)"></span>
+                                <span class="w3-badge demo w3-border w3-transparent w3-hover-white"
+                                      onclick="currentDiv(2)"></span>
+                                <span class="w3-badge demo w3-border w3-transparent w3-hover-white"
+                                      onclick="currentDiv(3)"></span>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                {% for product in products %}
+                                    <div class="col-4">
+                                        <div class="product-item-form">
+                                            <ul class="product-item">
+                                                <li><img src="{{ product.main_image.url }}" id="product-title-image">
+                                                </li>
+                                                <li><a href="{% url 'product_detail' product.category product.id %}"
+                                                       id="product-name">{{ product.name }}</a></li>
+                                                <li><label id="product-price" style="font-size: 20px; color: darkred">Price: {{ product.price }}</label></li>
+                                                <li><label
+                                                        id="product-short-description">{{ product.short_description }}</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of center content -->
+{% endblock %}
+{% block extrajs %}
+    <script src="{% static 'js/app.js' %}"></script>
+{% endblock %}
